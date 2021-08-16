@@ -4,30 +4,33 @@
 
 <script>
 import BarChart from "../charts/BarChart"
+import filteredData from "../assets/filteredData"
 export default {
     name: "D3CBarChart",
     data() {
    return {
-       data: [
-           ["Montag", 100],
-           ["Dienstag", 89],
-           ["Mittwoch", 70],
-           ["Donnerstag", 120],
-           ["Freitag", 89],
-       ]
+       data: filteredData,
+       options: {
+           margin: {
+               top: 20,
+               bottom: 20,
+               left: 50,
+               right: 70
+           }
+       }
    };
  },
  methods: {
      toDate: function() {
          const newData = this.data.map(element => {
-             return {...element, Tag: Date.parse(element.Tag)}
+             return {...element, date: Date.parse(element.date)}
          })
          return newData
      }
 
  },
  mounted() {
-     new BarChart({data: this.data, element: document.querySelector("#bar-chart")})
+    new BarChart(this.toDate(), document.querySelector("#bar-chart"), this.options)
  },
 }
 </script>

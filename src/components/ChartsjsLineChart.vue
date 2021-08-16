@@ -6,10 +6,10 @@
 
 <script>
 import Chart from 'chart.js'
-import newsData from '../newsLineChartData.js'
+import newsData from '../assets/newsLineChartData.js'
 
 export default {
-  name: 'NewsLineChart',
+  name: 'ChartsjsLineChart',
   data() {
     return {
       newsData: newsData
