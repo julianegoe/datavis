@@ -11,13 +11,12 @@ class LineChart {
 
 	draw() {
 		this.width = this.element.offsetWidth;
-		console.log('width: ' + this.width);
-		this.height = this.width / 2;
+		this.height = this.width / 3;
 		this.margin = {
-			top: 20,
-			right: 20,
+			top: 60,
+			right: 60,
 			bottom: 20,
-			left: 20,
+			left: 50,
 		};
 
 		this.element.innerHTML = '';
@@ -36,23 +35,24 @@ class LineChart {
 	createScales() {
 		const m = this.margin;
 
-		const xExtent = d3.extent(this.data, (d) => d.Tag);
-		console.log('xextent: ' + xExtent);
-		const yExtent = d3.extent(this.data, (d) => d.COVID);
+		this.yExtent = d3.extent(this.data, (d) => d.used / d.sent);
 
-		if (yExtent[0] > 0) {
-			yExtent[0] = 0;
+		if (this.yExtent[0] > 0) {
+			this.yExtent[0] = 0;
 		}
 
+		console.log(this.yExtent)
+
 		this.xScale = d3
-			.scaleTime()
+			.scalePoint()
 			.range([0, this.width - m.right])
-			.domain(xExtent);
+			.domain(this.data.map((d) => d.date))
+			.padding(0.2);
 
 		this.yScale = d3
 			.scaleLinear()
 			.range([this.height - (m.top + m.bottom), 0])
-			.domain(yExtent);
+			.domain(this.yExtent);
 	}
 
 	addAxes() {
@@ -61,12 +61,15 @@ class LineChart {
 		const xAxis = d3
 			.axisBottom()
 			.scale(this.xScale)
-			.ticks(d3.timeWeek);
+			.ticks(d3.timeDay)
+			.tickFormat(d3.timeFormat("%a %d"))
+			.tickSize(- this.height)
 
 		const yAxis = d3
 			.axisLeft()
 			.scale(this.yScale)
-			.tickFormat(d3.format('d'));
+			.ticks()
+			.tickFormat(d3.format('.0%'))
 
 		this.plot
 			.append('g')
@@ -80,18 +83,35 @@ class LineChart {
 			.call(yAxis);
 	}
 
+	addDot() {
+		this.plot
+		.selectAll(".dot")
+		.data([this.data[this.data.length - 1]])
+		.enter()
+		.append("circle")
+		.attr("r", 12)
+		.attr("cx", (d) => this.xScale(d.date))
+		.attr("cy", (d) => this.yScale(d.used / d.sent))
+		.attr('fill', '#00E281' )
+	}
+
+
 	addLine() {
 		const line = d3
 			.line()
-			.x((d) => this.xScale(d.Tag))
-			.y((d) => this.yScale(d.COVID));
+			.curve(d3.curveNatural)
+			.x((d) => this.xScale(d.date))
+			.y((d) => this.yScale(d.used / d.sent));
 		this.plot
 			.append('path')
 			.datum(this.data)
 			.classed('line', true)
 			.attr('d', line)
 			.attr('fill', 'none')
-			.style('stroke', this.lineColor || 'red');
+			.style('stroke', '#00B064')
+			.style('stroke-width', 5);
+
+		this.addDot()
 	}
 
 	setColor(newColor) {

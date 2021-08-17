@@ -9,13 +9,13 @@ class BarChart {
 		/* 
 		{
 			margin: {
-				top: number,
-				right: number,
-				bottom: number,
+				top: sent,
+				right: sent,
+				bottom: sent,
 				left: umber
 			},
-			width: number,
-			height: number,
+			width: sent,
+			height: sent,
 			timeFormat: valid d3 timeformat,
 			yTickFormat: valid d3.format for ticks on y axis,
 		}
@@ -54,7 +54,7 @@ class BarChart {
 	createScales() {
 		const m = this.margin;
 
-		this.yExtent = d3.extent(this.data, (d) => d.number);
+		this.yExtent = d3.extent(this.data, (d) => d.sent);
 
 		if (this.yExtent[0] > 0) {
 			this.yExtent[0] = 0;
@@ -103,8 +103,8 @@ class BarChart {
 			.enter()
 			.append('rect')
 			.attr('x', (d) => this.xScale(d.date))
-			.attr('y', (d) => this.yScale(d.number))
-			.attr('height', (d) => this.height - this.margin.bottom - this.margin.top - this.yScale(d.number))
+			.attr('y', (d) => this.yScale(d.sent))
+			.attr('height', (d) => this.height - this.margin.bottom - this.margin.top - this.yScale(d.sent))
 			.attr('width', this.xScale.bandwidth())
 	}
 
@@ -118,7 +118,7 @@ class BarChart {
 	addDash() {
 		const guideData = new Array(this.data.length).fill(this.yExtent[1])
 		const newData = this.data.map((data, index) => {
-			return {date: data.date, number: guideData[index]}
+			return {date: data.date, sent: guideData[index]}
 		})
 		this.plot
 		.selectAll('guide-bar')
@@ -126,8 +126,8 @@ class BarChart {
 		.enter()
 		.append('rect')
 		.attr('x', (d) => this.xScale(d.date))
-		.attr('y', (d) => this.yScale(d.number))
-		.attr('height', (d, i) => this.yScale(this.data[i].number) - this.yScale(d.number))
+		.attr('y', (d) => this.yScale(d.sent))
+		.attr('height', (d, i) => this.yScale(this.data[i].sent) - this.yScale(d.sent))
 		.attr('width', this.xScale.bandwidth())
 		.attr('fill', 'transparent')
 		.attr('stroke', '#EEEEEE' )

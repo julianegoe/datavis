@@ -5,7 +5,7 @@
 <ChartsjsLineChart></ChartsjsLineChart>
 <h1>Apex Charts - Gesendete Beträge</h1>
 <ApexBarChart></ApexBarChart>
-<h1>D3 - Google Trends Covid</h1>
+<h1>D3 - Verwendete Beiträge</h1>
 <D3LineChart></D3LineChart>
 <h1>D3 - Gesendete Beträge</h1>
 <D3CBarChart></D3CBarChart>

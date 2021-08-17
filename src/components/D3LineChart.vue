@@ -3,27 +3,26 @@
 </template>
 
 <script>
-import chartData from "../assets/data.json"
 import LineChart from "../charts/LineChart"
+import filteredData from "../assets/filteredData"
 export default {
     name: "D3CLineChart",
     data() {
    return {
-       data: chartData
+       data: filteredData
    };
  },
  methods: {
      toDate: function() {
          const newData = this.data.map(element => {
-             return {...element, Tag: Date.parse(element.Tag)}
+             return {...element, date: Date.parse(element.date)}
          })
          return newData
      }
 
  },
  mounted() {
-     const chart = new LineChart({data: this.toDate(), element: document.querySelector("#line-chart")})
-     chart.setColor( "blue" )
+      new LineChart({data: this.toDate(), element: document.querySelector("#line-chart")})
  },
 }
 </script>
@@ -31,6 +30,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+::v-deep(line)  {
+    stroke-dasharray: 10;
+    stroke: #EEEEEE;
+    stroke-width: 5;
+}
 
+::v-deep(text) {
+    display: none
+}
+
+::v-deep(.y, .axis) {
+    display: none
+}
+
+::v-deep(.domain) {
+    display: none
+}
 
 </style>
